@@ -1,5 +1,5 @@
 {% set name = "hclfmt" %}
-{% set version = "2.20.0" %}
+{% set version = "2.20.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/hashicorp/hcl/archive/v{{ version }}.tar.gz
-  sha256: 7918d30a5c847c90f6eaeef35f327a986befd99131e1b5cd94b58295963fbb34
+  sha256: 3dd85236f08b264178cbdcd7638fee4fbd017c48bf7f53d71d6934c908b23f3d
   folder: src
 
 build:
