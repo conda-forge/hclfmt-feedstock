@@ -1,0 +1,83 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+schema_version: 1
+
+context:
+  version: 2.24.0
+  go_mod: github.com/hashicorp/hcl
+  go_build: go build -v -buildmode=pie -trimpath -modcacherw
+  go_bin: ${{ "%LIBRARY_BIN%\\%PKG_NAME%.exe" if win else "$PREFIX/bin/$PKG_NAME" }}
+
+recipe:
+  name: hcl-split
+  version: ${{ version }}
+
+source:
+  url: https://${{ go_mod }}/archive/v${{ version }}.tar.gz
+  sha256: 0eef23c176aeb7d6f2e7a93aa7bb66405ff38bb407bac0a1ecbab89b09c7c6cf
+  target_directory: ${{ go_mod }}
+
+build:
+  number: 1
+
+outputs:
+  - package:
+      name: hclfmt
+    requirements:
+      build:
+        - ${{ compiler("go-nocgo") }}
+        - go-licenses
+    build:
+      script:
+        env:
+          GOPATH: ${{ SRC_DIR }}
+        content:
+          - cd ${{ go_mod }}/cmd/hclfmt
+          - ${{ go_build }} -o "${{ go_bin }}"
+          - go-licenses save . --save_path "${{ SRC_DIR }}/library_licenses" --ignore ${{ go_mod }}
+    tests:
+      - script:
+          - hclfmt -version
+    about:
+      summary: HCL reformatter
+      repository: https://${{ go_mod }}/tree/main/cmd/hclfmt
+      license_file:
+        - ${{ go_mod }}/LICENSE
+        - library_licenses/
+
+  - package:
+      name: hcldec
+    requirements:
+      build:
+        - ${{ compiler("go-nocgo") }}
+        - go-licenses
+    build:
+      script:
+        env:
+          GOPATH: ${{ SRC_DIR }}
+        content:
+          - cd ${{ go_mod }}/cmd/hcldec
+          - ${{ go_build }} -o "${{ go_bin }}"
+          - go-licenses save . --save_path "${{ SRC_DIR }}/library_licenses" --ignore ${{ go_mod }}
+    tests:
+      - script:
+          - hcldec --version
+    about:
+      summary: transforms HCL input into JSON output using a decoding specification given by the user
+      repository: https://${{ go_mod }}/tree/main/cmd/hcldec
+      license_file:
+        - ${{ go_mod }}/LICENSE
+        - library_licenses/
+
+about:
+  license: MPL-2.0
+  license_file:
+    - src/LICENSE
+  summary: HCL is the HashiCorp configuration language.
+  homepage: https://${{ go_mod }}
+
+extra:
+  feedstock-name: hclfmt
+  recipe-maintainers:
+    - xhochy
+    - pavelzw
+    - bollwyvl

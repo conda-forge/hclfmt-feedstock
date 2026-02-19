@@ -3,11 +3,28 @@ About hclfmt-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/hclfmt-feedstock/blob/main/LICENSE.txt)
 
+
+About hclfmt
+------------
+
+Home: https://github.com/hashicorp/hcl
+
+Package license: MPL-2.0
+
+Summary: transforms HCL input into JSON output using a decoding specification given by the user
+
+Development: https://github.com/hashicorp/hcl/tree/main/cmd/hcldec
+
+About hclfmt
+------------
+
 Home: https://github.com/hashicorp/hcl
 
 Package license: MPL-2.0
 
 Summary: HCL reformatter
+
+Development: https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt
 
 Current build status
 ====================
@@ -81,6 +98,7 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-hcldec-green.svg)](https://anaconda.org/conda-forge/hcldec) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/hcldec.svg)](https://anaconda.org/conda-forge/hcldec) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/hcldec.svg)](https://anaconda.org/conda-forge/hcldec) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/hcldec.svg)](https://anaconda.org/conda-forge/hcldec) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-hclfmt-green.svg)](https://anaconda.org/conda-forge/hclfmt) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/hclfmt.svg)](https://anaconda.org/conda-forge/hclfmt) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/hclfmt.svg)](https://anaconda.org/conda-forge/hclfmt) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/hclfmt.svg)](https://anaconda.org/conda-forge/hclfmt) |
 
 Installing hclfmt
@@ -93,41 +111,41 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `hclfmt` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `hcldec, hclfmt` can be installed with `conda`:
 
 ```
-conda install hclfmt
-```
-
-or with `mamba`:
-
-```
-mamba install hclfmt
-```
-
-It is possible to list all of the versions of `hclfmt` available on your platform with `conda`:
-
-```
-conda search hclfmt --channel conda-forge
+conda install hcldec hclfmt
 ```
 
 or with `mamba`:
 
 ```
-mamba search hclfmt --channel conda-forge
+mamba install hcldec hclfmt
+```
+
+It is possible to list all of the versions of `hcldec` available on your platform with `conda`:
+
+```
+conda search hcldec --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search hcldec --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search hclfmt --channel conda-forge
+mamba repoquery search hcldec --channel conda-forge
 
-# List packages depending on `hclfmt`:
-mamba repoquery whoneeds hclfmt --channel conda-forge
+# List packages depending on `hcldec`:
+mamba repoquery whoneeds hcldec --channel conda-forge
 
-# List dependencies of `hclfmt`:
-mamba repoquery depends hclfmt --channel conda-forge
+# List dependencies of `hcldec`:
+mamba repoquery depends hcldec --channel conda-forge
 ```
 
 
@@ -152,12 +170,12 @@ it is possible to build and upload installable packages to the
 [conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
 channel for Linux, Windows and OSX respectively.
 
-To manage the continuous integration and simplify feedstock maintenance
+To manage the continuous integration and simplify feedstock maintenance,
 [conda-smithy](https://github.com/conda-forge/conda-smithy) has been developed.
 Using the ``conda-forge.yml`` within this repository, it is possible to re-render all of
 this feedstock's supporting files (e.g. the CI configuration files) with ``conda smithy rerender``.
 
-For more information please check the [conda-forge documentation](https://conda-forge.org/docs/).
+For more information, please check the [conda-forge documentation](https://conda-forge.org/docs/).
 
 Terminology
 ===========
@@ -184,7 +202,7 @@ merged, the recipe will be re-built and uploaded automatically to the
 everybody to install and use from the `conda-forge` channel.
 Note that all branches in the conda-forge/hclfmt-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
-on branches in forks and branches in the main repository should only be used to
+on branches in forks, and branches in the main repository should only be used to
 build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
@@ -197,6 +215,7 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
+* [@bollwyvl](https://github.com/bollwyvl/)
 * [@pavelzw](https://github.com/pavelzw/)
 * [@xhochy](https://github.com/xhochy/)
 
