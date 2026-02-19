@@ -1,0 +1,81 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+schema_version: 1
+
+context:
+  version: 2.24.0
+
+recipe:
+  name: hcl-split
+  version: ${{ version }}
+
+source:
+  url: https://github.com/hashicorp/hcl/archive/v${{ version }}.tar.gz
+  sha256: 0eef23c176aeb7d6f2e7a93aa7bb66405ff38bb407bac0a1ecbab89b09c7c6cf
+
+build:
+  number: 0
+
+outputs:
+  - package:
+      name: hclfmt
+    requirements:
+      build:
+        - ${{ compiler("go-nocgo") }}
+        - go-licenses
+    build:
+      script:
+        - cd cmd/hclfmt
+        - if: unix
+          then:
+            - go build -v -o $PREFIX/bin/hclfmt -modcacherw
+          else:
+            - go install -v .
+        - go-licenses save . --save_path library_licenses
+    tests:
+      - script:
+          - hclfmt -version
+    about:
+      summary: HCL reformatter
+      repository: https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt
+      license_file:
+        - LICENSE
+        - cmd/hclfmt/library_licenses/
+
+  - package:
+      name: hcldec
+    requirements:
+      build:
+        - ${{ compiler("go-nocgo") }}
+        - go-licenses
+    build:
+      script:
+        - cd cmd/hcldec
+        - if: unix
+          then:
+            - go build -v -o $PREFIX/bin/hcldec -modcacherw
+          else:
+            - go install -v .
+        - go-licenses save . --save_path library_licenses
+    tests:
+      - script:
+          - hcldec -version
+    about:
+      summary: transforms HCL input into JSON output using a decoding specification given by the user
+      repository: https://github.com/hashicorp/hcl/tree/main/cmd/hcldec
+      license_file:
+        - LICENSE
+        - cmd/hcldec/library_licenses/
+
+about:
+  license: MPL-2.0
+  license_file:
+    - LICENSE
+  summary: HCL is the HashiCorp configuration language.
+  homepage: https://github.com/hashicorp/hcl
+
+extra:
+  feedstock-name: hclfmt
+  recipe-maintainers:
+    - xhochy
+    - pavelzw
+    - bollwyvl
