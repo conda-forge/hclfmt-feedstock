@@ -3,17 +3,21 @@ schema_version: 1
 
 context:
   version: 2.24.0
+  go_mod: github.com/hashicorp/hcl
+  go_build: go build -v -buildmode=pie -trimpath -modcacherw
+  go_bin: ${{"%LIBRARY_BIN%\\%PKG_NAME%.exe" if win else "$PREFIX/bin/$PKG_NAME" }}
 
 recipe:
   name: hcl-split
   version: ${{ version }}
 
 source:
-  url: https://github.com/hashicorp/hcl/archive/v${{ version }}.tar.gz
+  url: https://${{ go_mod }}/archive/v${{ version }}.tar.gz
   sha256: 0eef23c176aeb7d6f2e7a93aa7bb66405ff38bb407bac0a1ecbab89b09c7c6cf
+  target_directory: ${{ go_mod }}
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -24,22 +28,21 @@ outputs:
         - go-licenses
     build:
       script:
-        - cd cmd/hclfmt
-        - if: unix
-          then:
-            - go build -v -o $PREFIX/bin/hclfmt -modcacherw
-          else:
-            - go install -v .
-        - go-licenses save . --save_path library_licenses
+        env:
+          GOPATH: ${{ SRC_DIR }}
+        content:
+          - cd ${{ go_mod }}/cmd/hclfmt
+          - ${{ go_build }} -o "${{ go_bin }}"
+          - go-licenses save . --save_path "${{ SRC_DIR }}/library_licenses" --ignore ${{ go_mod }}
     tests:
       - script:
           - hclfmt -version
     about:
       summary: HCL reformatter
-      repository: https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt
+      repository: https://${{ go_mod }}/tree/main/cmd/hclfmt
       license_file:
-        - LICENSE
-        - cmd/hclfmt/library_licenses/
+        - ${{ go_mod }}/LICENSE
+        - library_licenses/
 
   - package:
       name: hcldec
@@ -49,29 +52,28 @@ outputs:
         - go-licenses
     build:
       script:
-        - cd cmd/hcldec
-        - if: unix
-          then:
-            - go build -v -o $PREFIX/bin/hcldec -modcacherw
-          else:
-            - go install -v .
-        - go-licenses save . --save_path library_licenses
+        env:
+          GOPATH: ${{ SRC_DIR }}
+        content:
+          - cd ${{ go_mod }}/cmd/hcldec
+          - ${{ go_build }} -o "${{ go_bin }}"
+          - go-licenses save . --save_path "${{ SRC_DIR }}/library_licenses" --ignore ${{ go_mod }}
     tests:
       - script:
-          - hcldec -version
+          - hcldec --version
     about:
       summary: transforms HCL input into JSON output using a decoding specification given by the user
-      repository: https://github.com/hashicorp/hcl/tree/main/cmd/hcldec
+      repository: https://${{ go_mod }}/tree/main/cmd/hcldec
       license_file:
-        - LICENSE
-        - cmd/hcldec/library_licenses/
+        - ${{ go_mod }}/LICENSE
+        - library_licenses/
 
 about:
   license: MPL-2.0
   license_file:
-    - LICENSE
+    - src/LICENSE
   summary: HCL is the HashiCorp configuration language.
-  homepage: https://github.com/hashicorp/hcl
+  homepage: https://${{ go_mod }}
 
 extra:
   feedstock-name: hclfmt
